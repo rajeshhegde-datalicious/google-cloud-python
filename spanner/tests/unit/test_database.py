@@ -1104,7 +1104,7 @@ class TestBatchSnapshot(_BaseTest):
         database = self._make_database()
         batch_txn = self._make_one(database)
         snapshot = batch_txn._snapshot = self._make_snapshot()
-        snapshot.partition_read.return_value = self.TOKENS
+        snapshot._partition_read.return_value = self.TOKENS
 
         batches = list(
             batch_txn.generate_read_batches(
@@ -1122,7 +1122,7 @@ class TestBatchSnapshot(_BaseTest):
             self.assertEqual(batch['partition'], token)
             self.assertEqual(batch['read'], expected_read)
 
-        snapshot.partition_read.assert_called_once_with(
+        snapshot._partition_read.assert_called_once_with(
             table=self.TABLE, columns=self.COLUMNS, keyset=keyset,
             index='', partition_size_bytes=None, max_partitions=max_partitions)
 
@@ -1132,7 +1132,7 @@ class TestBatchSnapshot(_BaseTest):
         database = self._make_database()
         batch_txn = self._make_one(database)
         snapshot = batch_txn._snapshot = self._make_snapshot()
-        snapshot.partition_read.return_value = self.TOKENS
+        snapshot._partition_read.return_value = self.TOKENS
 
         batches = list(
             batch_txn.generate_read_batches(
@@ -1150,7 +1150,7 @@ class TestBatchSnapshot(_BaseTest):
             self.assertEqual(batch['partition'], token)
             self.assertEqual(batch['read'], expected_read)
 
-        snapshot.partition_read.assert_called_once_with(
+        snapshot._partition_read.assert_called_once_with(
             table=self.TABLE, columns=self.COLUMNS, keyset=keyset,
             index=self.INDEX, partition_size_bytes=size, max_partitions=None)
 
@@ -1189,7 +1189,7 @@ class TestBatchSnapshot(_BaseTest):
         database = self._make_database()
         batch_txn = self._make_one(database)
         snapshot = batch_txn._snapshot = self._make_snapshot()
-        snapshot.partition_query.return_value = self.TOKENS
+        snapshot._partition_query.return_value = self.TOKENS
 
         batches = list(
             batch_txn.generate_query_batches(
@@ -1203,7 +1203,7 @@ class TestBatchSnapshot(_BaseTest):
             self.assertEqual(batch['partition'], token)
             self.assertEqual(batch['query'], expected_query)
 
-        snapshot.partition_query.assert_called_once_with(
+        snapshot._partition_query.assert_called_once_with(
             sql=sql, params=None, param_types=None,
             partition_size_bytes=None, max_partitions=max_partitions)
 
@@ -1218,7 +1218,7 @@ class TestBatchSnapshot(_BaseTest):
         database = self._make_database()
         batch_txn = self._make_one(database)
         snapshot = batch_txn._snapshot = self._make_snapshot()
-        snapshot.partition_query.return_value = self.TOKENS
+        snapshot._partition_query.return_value = self.TOKENS
 
         batches = list(
             batch_txn.generate_query_batches(
@@ -1235,7 +1235,7 @@ class TestBatchSnapshot(_BaseTest):
             self.assertEqual(batch['partition'], token)
             self.assertEqual(batch['query'], expected_query)
 
-        snapshot.partition_query.assert_called_once_with(
+        snapshot._partition_query.assert_called_once_with(
             sql=sql, params=params, param_types=param_types,
             partition_size_bytes=size, max_partitions=None)
 

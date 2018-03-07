@@ -105,7 +105,7 @@ class _SnapshotBase(_SessionWrapper):
 
         :type partition: bytes
         :param partition: (Optional) one of the partition tokens returned
-                          from :meth:`partition_read`.  Incompatible with
+                          from :meth:`_partition_read`.  Incompatible with
                           ``limit``.
 
         :rtype: :class:`~google.cloud.spanner_v1.streamed.StreamedResultSet`
@@ -164,7 +164,7 @@ class _SnapshotBase(_SessionWrapper):
 
         :type partition: bytes
         :param partition: (Optional) one of the partition tokens returned
-                          from :meth:`partition_query`.
+                          from :meth:`_partition_query`.
 
         :rtype: :class:`~google.cloud.spanner_v1.streamed.StreamedResultSet`
         :returns: a result set instance which can be used to consume rows.
@@ -209,8 +209,8 @@ class _SnapshotBase(_SessionWrapper):
         else:
             return StreamedResultSet(iterator)
 
-    def partition_read(self, table, columns, keyset, index='',
-                       partition_size_bytes=None, max_partitions=None):
+    def _partition_read(self, table, columns, keyset, index='',
+                        partition_size_bytes=None, max_partitions=None):
         """Perform a ``ParitionRead`` API request for rows in a table.
 
         :type table: str
@@ -273,8 +273,8 @@ class _SnapshotBase(_SessionWrapper):
 
         return [partition.partition_token for partition in response.partitions]
 
-    def partition_query(self, sql, params=None, param_types=None,
-                        partition_size_bytes=None, max_partitions=None):
+    def _partition_query(self, sql, params=None, param_types=None,
+                         partition_size_bytes=None, max_partitions=None):
         """Perform a ``ParitionQuery`` API request.
 
         :type sql: str

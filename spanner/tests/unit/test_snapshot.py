@@ -448,7 +448,7 @@ class Test_SnapshotBase(unittest.TestCase):
         if not first:
             derived._transaction_id = txn_id
 
-        tokens = list(derived.partition_read(
+        tokens = list(derived._partition_read(
             TABLE_NAME, COLUMNS, keyset,
             index=index,
             partition_size_bytes=size,
@@ -474,15 +474,15 @@ class Test_SnapshotBase(unittest.TestCase):
         self.assertEqual(
             metadata, [('google-cloud-resource-prefix', database.name)])
 
-    def test_partition_read_single_use_raises(self):
+    def test__partition_read_single_use_raises(self):
         with self.assertRaises(ValueError):
             self._partition_read_helper(multi_use=False, first=True)
 
-    def test_partition_read_existing_transaction_raises(self):
+    def test__partition_read_existing_transaction_raises(self):
         with self.assertRaises(ValueError):
             self._partition_read_helper(multi_use=True, first=False)
 
-    def test_partition_read_other_error(self):
+    def test__partition_read_other_error(self):
         from google.cloud.spanner_v1.keyset import KeySet
 
         keyset = KeySet(all_=True)
@@ -494,19 +494,19 @@ class Test_SnapshotBase(unittest.TestCase):
         derived._multi_use = True
 
         with self.assertRaises(RuntimeError):
-            list(derived.partition_read(TABLE_NAME, COLUMNS, keyset))
+            list(derived._partition_read(TABLE_NAME, COLUMNS, keyset))
 
-    def test_partition_read_ok_w_index_no_options(self):
+    def test__partition_read_ok_w_index_no_options(self):
         self._partition_read_helper(multi_use=True, first=True, index='index')
 
-    def test_partition_read_ok_w_size(self):
+    def test__partition_read_ok_w_size(self):
         self._partition_read_helper(multi_use=True, first=True, size=2000)
 
-    def test_partition_read_ok_w_max_partitions(self):
+    def test__partition_read_ok_w_max_partitions(self):
         self._partition_read_helper(
             multi_use=True, first=True, max_partitions=4)
 
-    def test_partition_query_other_error(self):
+    def test__partition_query_other_error(self):
         database = _Database()
         database.spanner_api = self._make_spanner_api()
         database.spanner_api.partition_query.side_effect = RuntimeError()
@@ -515,16 +515,16 @@ class Test_SnapshotBase(unittest.TestCase):
         derived._multi_use = True
 
         with self.assertRaises(RuntimeError):
-            list(derived.partition_query(SQL_QUERY))
+            list(derived._partition_query(SQL_QUERY))
 
-    def test_partition_query_w_params_wo_param_types(self):
+    def test__partition_query_w_params_wo_param_types(self):
         database = _Database()
         session = _Session(database)
         derived = self._makeDerived(session)
         derived._multi_use = True
 
         with self.assertRaises(ValueError):
-            list(derived.partition_query(SQL_QUERY_WITH_PARAM, PARAMS))
+            list(derived._partition_query(SQL_QUERY_WITH_PARAM, PARAMS))
 
     def _partition_query_helper(
             self, multi_use, first, size=None, max_partitions=None):
@@ -557,7 +557,7 @@ class Test_SnapshotBase(unittest.TestCase):
         if not first:
             derived._transaction_id = txn_id
 
-        tokens = list(derived.partition_query(
+        tokens = list(derived._partition_query(
             SQL_QUERY_WITH_PARAM, PARAMS, PARAM_TYPES,
             partition_size_bytes=size,
             max_partitions=max_partitions,
@@ -583,21 +583,21 @@ class Test_SnapshotBase(unittest.TestCase):
         self.assertEqual(
             metadata, [('google-cloud-resource-prefix', database.name)])
 
-    def test_partition_query_single_use_raises(self):
+    def test__partition_query_single_use_raises(self):
         with self.assertRaises(ValueError):
             self._partition_query_helper(multi_use=False, first=True)
 
-    def test_partition_query_existing_transaction_raises(self):
+    def test__partition_query_existing_transaction_raises(self):
         with self.assertRaises(ValueError):
             self._partition_query_helper(multi_use=True, first=False)
 
-    def test_partition_query_ok_w_index_no_options(self):
+    def test__partition_query_ok_w_index_no_options(self):
         self._partition_query_helper(multi_use=True, first=True)
 
-    def test_partition_query_ok_w_size(self):
+    def test__partition_query_ok_w_size(self):
         self._partition_query_helper(multi_use=True, first=True, size=2000)
 
-    def test_partition_query_ok_w_max_partitions(self):
+    def test__partition_query_ok_w_max_partitions(self):
         self._partition_query_helper(
             multi_use=True, first=True, max_partitions=4)
 

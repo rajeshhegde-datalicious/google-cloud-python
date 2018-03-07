@@ -1266,7 +1266,7 @@ class TestSessionAPI(unittest.TestCase, _TestData):
             expected = ([data[keyrow]] + data[start+1:end])
             self.assertEqual(rows, expected)
 
-    def test_partition_read_w_index(self):
+    def test_read_batches_w_index(self):
         row_count = 10
         columns = self.COLUMNS[1], self.COLUMNS[2]
         committed = self._set_up_table(row_count)
@@ -1528,7 +1528,7 @@ class TestSessionAPI(unittest.TestCase, _TestData):
             # NaNs cannot be searched for by equality.
             self.assertTrue(math.isnan(float_array[2]))
 
-    def test_partition_query(self):
+    def test_query_batches(self):
         row_count = 40
         sql = 'SELECT * FROM {}'.format(self.TABLE)
         committed = self._set_up_table(row_count)

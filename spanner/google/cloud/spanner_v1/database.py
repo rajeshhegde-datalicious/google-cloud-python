@@ -555,7 +555,7 @@ class BatchSnapshot(object):
             mappings of information used peform actual partitioned reads via
             :meth:`process_read_batch`.
         """
-        partitions = self._get_snapshot().partition_read(
+        partitions = self._get_snapshot()._partition_read(
             table=table, columns=columns, keyset=keyset, index=index,
             partition_size_bytes=partition_size_bytes,
             max_partitions=max_partitions)
@@ -628,7 +628,7 @@ class BatchSnapshot(object):
             mappings of information used peform actual partitioned reads via
             :meth:`process_read_batch`.
         """
-        partitions = self._get_snapshot().partition_query(
+        partitions = self._get_snapshot()._partition_query(
             sql=sql, params=params, param_types=param_types,
             partition_size_bytes=partition_size_bytes,
             max_partitions=max_partitions)
